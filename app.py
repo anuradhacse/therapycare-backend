@@ -3,6 +3,7 @@ from flask_cors import CORS
 from mailmerge import MailMerge
 from money import Money
 import pandas as pd
+from datetime import datetime
 import json
 
 # Create Flask app and enable CORS
@@ -102,7 +103,7 @@ def document():
     content = request.json
     data_entries = []
     support_category_map = {}
-    for i,j,l,m,n in zip(content['data'],content['hours'],content['goals'],content['description'],content['hoursFrequncy']):
+    for i,j,l,n in zip(content['data'],content['hours'],content['goals'],content['hoursFrequncy']):
         x={}
         SupportCategoryName = i['SupportCategoryName']
         x['SupportCategory'] = SupportCategoryName
@@ -128,7 +129,6 @@ def document():
         else:
             support_category_map[SupportCategoryName] = i['Price']*int(j)
         
-        x['Description'] = str(m)
         goals = ""
         for goal in l:
             goals = goals + goal + "\n" + "\n"
@@ -142,7 +142,16 @@ def document():
     document = MailMerge('WordTemplate.docx')
     total_cost = totalcost
     document.merge(totalcost= total_cost.format('en_US'))
-    document.merge(name=str(content['name']),ndis=str(content['ndis']),sos=str(content['sos']),duration=str(int(content['duration']/7))+" weeks",start=content['start'],end=content['end'],today=content['today'],policy=content['policy'])
+
+    datetimeobject = datetime.strptime(content['start'],'%Y-%m-%d')
+    newformat = datetimeobject.strftime('%m/%d/%Y')
+    startDate = newformat[:-4]+newformat[-2:]
+
+    datetimeobject = datetime.strptime(content['end'],'%Y-%m-%d')
+    newformat = datetimeobject.strftime('%m/%d/%Y')
+    endDate = newformat[:-4]+newformat[-2:]
+
+    document.merge(name=str(content['name']),ndis=str(content['ndis']),sos=str(content['sos']),duration=str(int(content['duration']/7))+" weeks",start=startDate,end=endDate,today=content['today'],policy=content['policy'])
     document.merge_rows('SupportCategory',data_entries)
     document.write('test-output.docx')
     return send_file('test-output.docx', as_attachment=True)
