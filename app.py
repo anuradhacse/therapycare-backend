@@ -6,7 +6,7 @@ import pandas as pd
 from datetime import datetime
 import json
 
-# Create Flask app and enable CORS
+## Create Flask app and enable CORS
 app = Flask(__name__)
 cors = CORS(app)
 
@@ -134,7 +134,7 @@ def document():
             goals = goals + goal + "\n" + "\n"
         x['Goals'] = goals
         data_entries.append(x)
-
+	
     totalcost = ""
     for key,value in support_category_map.items():
         totalcost = totalcost + key + " = " + Money(str(value),'USD').format('en_US') + "\n"
@@ -150,8 +150,9 @@ def document():
     datetimeobject = datetime.strptime(content['end'],'%Y-%m-%d')
     newformat = datetimeobject.strftime('%m/%d/%Y')
     endDate = newformat[:-4]+newformat[-2:]
-	
-	datetimeobject = datetime.strptime(content['today'],'%Y-%m-%d')
+
+
+    datetimeobject = datetime.strptime(content['today'],'%Y-%m-%d')
     newformat = datetimeobject.strftime('%m/%d/%Y')
     today = newformat[:-4]+newformat[-2:]
 
