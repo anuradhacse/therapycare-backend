@@ -144,14 +144,14 @@ def document():
     document.merge(totalcost= total_cost.format('en_US'))
 
     datetimeobject = datetime.strptime(content['start'],'%Y-%m-%d')
-    startDate = datetimeobject.strftime('%m/%d/%Y')
+    startDate = datetimeobject.strftime('%d/%m/%Y')
 
     datetimeobject = datetime.strptime(content['end'],'%Y-%m-%d')
-    endDate = datetimeobject.strftime('%m/%d/%Y')
+    endDate = datetimeobject.strftime('%d/%m/%Y')
 
 
     datetimeobject = datetime.strptime(content['today'],'%Y-%m-%d')
-    today = datetimeobject.strftime('%m/%d/%Y')
+    today = datetimeobject.strftime('%d/%m/%Y')
 
     document.merge(name=str(content['name']),ndis=str(content['ndis']),sos=str(content['sos']),duration=str(int(content['duration']/7))+" weeks",start=startDate,end=endDate,today=today,policy=content['policy'])
     document.merge_rows('SupportCategory',data_entries)
